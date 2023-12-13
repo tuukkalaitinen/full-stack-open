@@ -35,10 +35,14 @@ const App = () => {
 
     return (
         <div>
+            <h1>Anecdote of the day</h1>
             {anecdotes[selected]}<br/>
             has {votes[selected]} votes<br/>
             <Button text={'vote'} handleClick={handleVote} />
             <Button text={'next anecdote'} handleClick={handleNextAnecdote} />
+            <h1>Anecdote with most votes</h1>
+            {anecdotes[votes.reduce((maxIndex, currentValue, currentIndex, array) => currentValue > array[maxIndex] ? currentIndex : maxIndex, 0)]}<br/>
+            has {Math.max(...votes)} votes
         </div>
     )
 }
