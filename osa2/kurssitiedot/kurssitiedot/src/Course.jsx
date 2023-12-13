@@ -3,9 +3,7 @@ import Content from "./Content.jsx";
 
 const Course = (props) => {
 
-    const totalNrOfExercises = props.course.parts.reduce(function (accumulator, part) {
-        return accumulator + part.exercises;
-    }, 0);
+    const totalNrOfExercises = props.course.parts.reduce((accumulator, part) => accumulator + part.exercises, 0);
 
     return (
         <div>
