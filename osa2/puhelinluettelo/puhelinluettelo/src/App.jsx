@@ -7,6 +7,10 @@ const App = () => {
     const [newName, setNewName] = useState('')
 
     const handleClick = (event) => {
+        if (persons.filter(person => person.name === newName).length > 0) {
+            alert(`${newName} is already added to phonebook`)
+            return
+        }
         setPersons(persons.concat({name: newName}))
         setNewName('')
     }
