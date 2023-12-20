@@ -1,7 +1,8 @@
-import { useState } from 'react'
+import {useEffect, useState} from 'react'
 import Filter from './Filter.jsx'
 import PersonForm from "./PersonForm.jsx";
 import Persons from "./Persons.jsx";
+import axios from "axios";
 
 const App = () => {
     const [persons, setPersons] = useState([
@@ -37,6 +38,15 @@ const App = () => {
         const filteredPersons = persons.filter(person => person.name.toUpperCase().includes(event.target.value.toUpperCase()))
         setPersonsToShow(filteredPersons)
     }
+
+    useEffect(() => {
+        axios
+            .get('http://localhost:3001/persons')
+            .then(response => {
+                setPersons(response.data)
+                setPersonsToShow(response.data)
+            })
+    }, [])
 
     return (
         <div>
