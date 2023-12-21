@@ -6,9 +6,7 @@ import axios from "axios";
 import personService from "./PersonService.jsx";
 
 const App = () => {
-    const [persons, setPersons] = useState([
-        { name: 'Arto Hellas', number: '', id: 1 }
-    ])
+    const [persons, setPersons] = useState([{id: 1, name: 'Arto Hellas', number: '040-123456'}])
     const [newName, setNewName] = useState('')
     const [newNumber, setNewNumber] = useState('')
     const [searchTerm, setSearchTerm] = useState('')
@@ -16,28 +14,45 @@ const App = () => {
 
     const handleOnSubmit = (event) => {
         event.preventDefault()
-        if (persons.filter(person => person.name === newName).length > 0) {
-            alert(`${newName} is already added to phonebook`)
-            return
-        }
 
-        const personObject = {
-            id: persons.length + 1,
+        let maxExistingId = Math.max(...persons.map(p => p.id));
+
+        let personObject = {
+            id: maxExistingId + 1,
             name: newName,
             number: newNumber,
         }
 
-        personService.create(personObject)
-            .then(response => {
-                console.log(response)
-            })
-            .catch(error => {
-                console.log(error)
-                alert(error);
-            })
+        if (persons.filter(person => person.name === newName).length > 0) {
+            const wantToUpdateNumber = confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)
+            if (wantToUpdateNumber) {
+                const oldId = persons.filter(person => person.name === newName)[0].id;
+                personObject = {...personObject, id: oldId }
+                personService.update(oldId, {...personObject, id: oldId })
+                    .then(returnedPerson => {
+                        console.log(returnedPerson)
+                        setPersons(persons.map(person => person.id !== oldId ? person : returnedPerson))
+                        setPersonsToShow(personsToShow.map(person => person.id !== oldId ? person : returnedPerson))
+                    })
+                    .catch(error => {
+                        console.log(error)
+                    })
+            } else {
+                return
+            }
+        } else {
+            personService.create(personObject)
+                .then(response => {
+                    console.log(response)
+                    setPersons(persons.concat(personObject))
+                    setPersonsToShow(persons.concat(personObject))
+                })
+                .catch(error => {
+                    console.log(error)
+                    alert(error);
+                })
 
-        setPersons(persons.concat(personObject))
-        setPersonsToShow(persons.concat(personObject))
+        }
         setNewName('')
         setNewNumber('')
     }
