@@ -3,6 +3,7 @@ import Filter from './Filter.jsx'
 import PersonForm from "./PersonForm.jsx";
 import Persons from "./Persons.jsx";
 import axios from "axios";
+import personService from "./PersonService.jsx";
 
 const App = () => {
     const [persons, setPersons] = useState([
@@ -26,10 +27,13 @@ const App = () => {
             number: newNumber,
         }
 
-        axios
-            .post('http://localhost:3001/persons', personObject)
+        personService.create(personObject)
             .then(response => {
                 console.log(response)
+            })
+            .catch(error => {
+                console.log(error)
+                alert(error);
             })
 
         setPersons(persons.concat(personObject))
