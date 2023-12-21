@@ -73,7 +73,7 @@ const App = () => {
             <PersonForm handleOnSubmit={handleOnSubmit} newName={newName} handleOnNameChange={handleOnNameChange} newNumber={newNumber}
                         handleOnNumberChange={handleOnNumberChange} />
             <h3>Numbers</h3>
-            <Persons personsToShow={personsToShow} />
+            <Persons persons={persons} personsToShow={personsToShow} setPersons={setPersons} setPersonsToShow={setPersonsToShow}/>
         </div>
     )
 }
