@@ -4,24 +4,7 @@ import PersonForm from "./PersonForm.jsx";
 import Persons from "./Persons.jsx";
 import axios from "axios";
 import personService from "./PersonService.jsx";
-
-const Notification = ({ message }) => {
-    if (message === null) {
-        return null
-    } else if (message.startsWith('Added')) {
-        return (
-            <div className='success'>
-                {message}
-            </div>
-        )
-    } else {
-        return (
-            <div className='error'>
-                {message}
-            </div>
-        )
-    }
-}
+import Notification from "./Notification.jsx";
 
 const App = () => {
     const [persons, setPersons] = useState([{id: 1, name: 'Arto Hellas', number: '040-123456'}])
