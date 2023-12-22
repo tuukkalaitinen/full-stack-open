@@ -5,12 +5,31 @@ import Persons from "./Persons.jsx";
 import axios from "axios";
 import personService from "./PersonService.jsx";
 
+const Notification = ({ message }) => {
+    if (message === null) {
+        return null
+    } else if (message.startsWith('Added')) {
+        return (
+            <div className='success'>
+                {message}
+            </div>
+        )
+    } else {
+        return (
+            <div className='error'>
+                {message}
+            </div>
+        )
+    }
+}
+
 const App = () => {
     const [persons, setPersons] = useState([{id: 1, name: 'Arto Hellas', number: '040-123456'}])
     const [newName, setNewName] = useState('')
     const [newNumber, setNewNumber] = useState('')
     const [searchTerm, setSearchTerm] = useState('')
     const [personsToShow, setPersonsToShow] = useState(persons)
+    const [feedbackMessage, setFeedbackMessage] = useState(null)
 
     const handleOnSubmit = (event) => {
         event.preventDefault()
@@ -36,6 +55,12 @@ const App = () => {
                     })
                     .catch(error => {
                         console.log(error)
+                        setFeedbackMessage(
+                            `Information of ${personObject.name} has already been removed from server`
+                        )
+                        setTimeout(() => {
+                            setFeedbackMessage(null)
+                        }, 5000)
                     })
             } else {
                 return
@@ -46,6 +71,12 @@ const App = () => {
                     console.log(response)
                     setPersons(persons.concat(personObject))
                     setPersonsToShow(persons.concat(personObject))
+                    setFeedbackMessage(
+                        `Added ${personObject.name}`
+                    )
+                    setTimeout(() => {
+                        setFeedbackMessage(null)
+                    }, 5000)
                 })
                 .catch(error => {
                     console.log(error)
@@ -83,6 +114,7 @@ const App = () => {
     return (
         <div>
             <h2>Phonebook</h2>
+            <Notification message={feedbackMessage} />
             <Filter searchTerm={searchTerm} handledOnSearchTermChange={handledOnSearchTermChange} />
             <h3>Add a new</h3>
             <PersonForm handleOnSubmit={handleOnSubmit} newName={newName} handleOnNameChange={handleOnNameChange} newNumber={newNumber}
